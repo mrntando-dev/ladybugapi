@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ladybug API - Documentation</title>
+    <title>Ladybug API - Professional REST API Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,321 +26,1482 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             overflow: hidden;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 25s infinite;
+            bottom: -150px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        nav .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem;
             text-align: center;
+            color: white;
+            position: relative;
         }
 
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease;
         }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
         }
 
         .badge {
-            display: inline-block;
-            background: #4CAF50;
-            color: white;
-            padding: 5px 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .badge.success {
+            background: var(--success);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text);
+        }
+
+        /* Main Container */
+        .container-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
             border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.6s ease backwards;
         }
 
-        .content {
-            padding: 40px;
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .section {
-            margin-bottom: 40px;
+        .stat-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
         }
 
-        .section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
-            font-size: 1.8em;
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Section Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 10px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            background: var(--light);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* API Cards */
+        .api-grid {
+            display: grid;
+            gap: 2rem;
         }
 
         .api-card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .api-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
         }
 
         .api-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .api-card:hover::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+
+        .api-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .api-card h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.3em;
+            font-size: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .api-card .path {
-            background: #e9ecef;
-            padding: 10px 15px;
+        .method-badge {
+            padding: 0.3rem 0.8rem;
             border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            margin: 10px 0;
-            color: #495057;
-            word-break: break-all;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .api-card .method {
-            display: inline-block;
-            background: #28a745;
+        .method-badge.get {
+            background: var(--success);
             color: white;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: bold;
         }
 
-        .api-card .description {
-            color: #666;
-            margin-top: 10px;
-        }
-
-        .try-btn {
-            background: #667eea;
+        .method-badge.post {
+            background: var(--info);
             color: white;
-            border: none;
-            padding: 10px 20px;
+        }
+
+        .api-path {
+            background: var(--dark);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
-            margin-top: 10px;
-            transition: background 0.3s ease;
+            transition: all 0.3s;
         }
 
-        .try-btn:hover {
-            background: #764ba2;
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        .footer {
-            background: #2d3748;
-            color: white;
-            text-align: center;
-            padding: 30px;
+        .api-description {
+            color: var(--text);
+            margin: 1rem 0;
         }
 
-        .footer a {
-            color: #667eea;
+        .params {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .params strong {
+            color: var(--warning);
+        }
+
+        .response-example {
+            background: var(--dark);
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .response-example .json-key {
+            color: #7dd3fc;
+        }
+
+        .response-example .json-string {
+            color: #86efac;
+        }
+
+        .response-example .json-boolean {
+            color: #fb923c;
+        }
+
+        .api-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             text-decoration: none;
         }
 
-        .example {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            margin-top: 10px;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
         }
 
-        .param {
-            background: #fff3cd;
-            border-left: 3px solid #ffc107;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
+            .hero h1 {
+                font-size: 2.5rem;
             }
-            
-            .content {
-                padding: 20px;
+
+            .hero p {
+                font-size: 1.2rem;
             }
+
+            nav .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
+            }
+
+            .api-card-header {
+                flex-direction: column;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🐞 Ladybug API</h1>
-            <p>Simple and Easy to Use REST API</p>
-            <span class="badge">v1.0.0 - Active!</span>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span style="left: 10%; animation-delay: 0s;"></span>
+        <span style="left: 20%; animation-delay: 2s;"></span>
+        <span style="left: 30%; animation-delay: 4s;"></span>
+        <span style="left: 40%; animation-delay: 1s;"></span>
+        <span style="left: 50%; animation-delay: 3s;"></span>
+        <span style="left: 60%; animation-delay: 5s;"></span>
+        <span style="left: 70%; animation-delay: 2.5s;"></span>
+        <span style="left: 80%; animation-delay: 4.5s;"></span>
+        <span style="left: 90%; animation-delay: 1.5s;"></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-bug"></i>
+                Ladybug API
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#docs">Documentation</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
+    </nav>
 
-        <div class="content">
-            <!-- AI Tools Section -->
-            <div class="section">
-                <h2>🤖 AI Tools</h2>
-                
-                <div class="api-card">
-                    <h3>ChatGPT</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/ai/chatgpt?text=YOUR_MESSAGE</div>
-                    <div class="description">Talk with an AI chatbot powered by ChatGPT-like technology</div>
-                    <div class="param">
-                        <strong>Parameter:</strong> text (required) - Your message to the AI
-                    </div>
-                    <div class="example">
-                        {
-  "success": true,
-  "query": "Hello",
-  "response": "Hi! How can I help you?"
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/ai/chatgpt?text=Hello')">Try It</button>
-                </div>
-            </div>
-
-            <!-- Random Section -->
-            <div class="section">
-                <h2>🎲 Random</h2>
-                
-                <div class="api-card">
-                    <h3>Random Anime Image</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/random/anime</div>
-                    <div class="description">Get random anime character images</div>
-                    <div class="example">
-                        {
-  "success": true,
-  "url": "https://..."
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/random/anime')">Try It</button>
-                </div>
-
-                <div class="api-card">
-                    <h3>Random Cat Image</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/random/cat</div>
-                    <div class="description">Get random cute cat pictures</div>
-                    <div class="example">
-                        {
-  "success": true,
-  "url": "https://..."
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/random/cat')">Try It</button>
-                </div>
-            </div>
-
-            <!-- Search Section -->
-            <div class="section">
-                <h2>🔍 Search Tools</h2>
-                
-                <div class="api-card">
-                    <h3>YouTube Search</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/search/youtube?q=YOUR_QUERY</div>
-                    <div class="description">Search for YouTube videos</div>
-                    <div class="param">
-                        <strong>Parameter:</strong> q (required) - Search query
-                    </div>
-                    <div class="example">
-                        {
-  "success": true,
-  "query": "music",
-  "results": [...]
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/search/youtube?q=music')">Try It</button>
-                </div>
-            </div>
-
-            <!-- Tools Section -->
-            <div class="section">
-                <h2>🛠️ Tools</h2>
-                
-                <div class="api-card">
-                    <h3>Random Joke</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/tools/joke</div>
-                    <div class="description">Get a random programming joke</div>
-                    <div class="example">
-                        {
-  "success": true,
-  "setup": "Why do programmers...",
-  "punchline": "Because..."
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/tools/joke')">Try It</button>
-                </div>
-
-                <div class="api-card">
-                    <h3>QR Code Generator</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/tools/qrcode?text=YOUR_TEXT</div>
-                    <div class="description">Generate QR codes from text</div>
-                    <div class="param">
-                        <strong>Parameter:</strong> text (required) - Text to encode
-                    </div>
-                    <div class="example">
-                        {
-  "success": true,
-  "text": "Hello",
-  "qrCode": "https://..."
-}
-                    </div>
-                    <button class="try-btn" onclick="tryAPI('/tools/qrcode?text=Hello')">Try It</button>
-                </div>
-            </div>
-
-            <!-- Status Section -->
-            <div class="section">
-                <h2>📊 Status</h2>
-                
-                <div class="api-card">
-                    <h3>API Status</h3>
-                    <span class="method">GET</span>
-                    <div class="path">/api/status</div>
-                    <div class="description">Check API server status and uptime</div>
-                    <button class="try-btn" onclick="tryAPI('/api/status')">Try It</button>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>🐞 Ladybug API</h1>
+        <p>Professional REST API for Modern Developers</p>
+        <div class="badges">
+            <span class="badge success">
+                <i class="fas fa-check-circle"></i>
+                Active & Running
+            </span>
+            <span class="badge">
+                <i class="fas fa-code"></i>
+                v1.0.0
+            </span>
+            <span class="badge">
+                <i class="fas fa-rocket"></i>
+                45+ Endpoints
+            </span>
+            <span class="badge">
+                <i class="fas fa-shield-alt"></i>
+                Free to Use
+            </span>
         </div>
+    </section>
 
-        <div class="footer">
-            <p>© 2024 Ladybug API - Created by Ntando Mods Team</p>
-            <p>Made with ❤️ for developers</p>
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search endpoints... (e.g., chatgpt, youtube, anime)">
         </div>
     </div>
 
+    <!-- Main Content -->
+    <div class="container-main" id="docs">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-robot"></i>
+                <h3>10+</h3>
+                <p>AI Endpoints</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-download"></i>
+                <h3>15+</h3>
+                <p>Download Tools</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-search"></i>
+                <h3>8+</h3>
+                <p>Search APIs</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-tools"></i>
+                <h3>12+</h3>
+                <p>Utility Tools</p>
+            </div>
+        </div>
+
+        <!-- Tabs Container -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('ai')">
+                    <i class="fas fa-robot"></i> AI Tools
+                </button>
+                <button class="tab-btn" onclick="showTab('download')">
+                    <i class="fas fa-download"></i> Downloads
+                </button>
+                <button class="tab-btn" onclick="showTab('search')">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button class="tab-btn" onclick="showTab('random')">
+                    <i class="fas fa-dice"></i> Random
+                </button>
+                <button class="tab-btn" onclick="showTab('tools')">
+                    <i class="fas fa-tools"></i> Tools
+                </button>
+                <button class="tab-btn" onclick="showTab('info')">
+                    <i class="fas fa-info-circle"></i> Info
+                </button>
+            </div>
+
+            <!-- AI Tools Tab -->
+            <div id="ai" class="tab-content active">
+                <div class="api-grid">
+                    <!-- ChatGPT -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-comments"></i> ChatGPT</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /ai/chatgpt?text=YOUR_MESSAGE
+                            <button class="copy-btn" onclick="copyToClipboard('/ai/chatgpt?text=Hello')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Chat with an advanced AI chatbot powered by ChatGPT-like technology. Get intelligent responses to your questions.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>text</code> (required) - Your message to the AI
+                        </div>
+                        <div class="response-example">
+<span class="json-key">{</span>
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"query"</span>: <span class="json-string">"Hello"</span>,
+  <span class="json-key">"response"</span>: <span class="json-string">"Hi! How can I help you?"</span>
+<span class="json-key">}</span>
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/ai/chatgpt?text=Hello')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/ai/chatgpt?text=YOUR_TEXT')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Text to Image -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-image"></i> AI Image Generator</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /ai/texttoimg?prompt=YOUR_PROMPT
+                            <button class="copy-btn" onclick="copyToClipboard('/ai/texttoimg?prompt=cat')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Generate stunning images from text descriptions using AI. Create unique artwork with simple prompts.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>prompt</code> (required) - Description of the image you want to generate
+                        </div>
+                        <div class="response-example">
+<span class="json-key">{</span>
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"prompt"</span>: <span class="json-string">"A cute cat"</span>,
+  <span class="json-key">"imageUrl"</span>: <span class="json-string">"https://..."</span>
+<span class="json-key">}</span>
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/ai/texttoimg?prompt=a cute cat')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/ai/texttoimg?prompt=YOUR_PROMPT')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Writer -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-pen-fancy"></i> AI Story Writer</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /ai/writer?topic=YOUR_TOPIC
+                            <button class="copy-btn" onclick="copyToClipboard('/ai/writer?topic=adventure')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Generate creative short stories on any topic. Perfect for writers seeking inspiration.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>topic</code> (required) - The topic or theme for your story
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/ai/writer?topic=adventure')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/ai/writer?topic=YOUR_TOPIC')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Translate -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-language"></i> AI Translator</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /ai/translate?text=YOUR_TEXT&to=LANGUAGE_CODE
+                            <button class="copy-btn" onclick="copyToClipboard('/ai/translate?text=hello&to=es')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Translate text between multiple languages instantly with AI-powered accuracy.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>text</code> (required) - Text to translate<br>
+                            • <code>to</code> (optional, default: en) - Target language code (e.g., es, fr, de)
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/ai/translate?text=hello&to=es')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/ai/translate?text=YOUR_TEXT&to=LANG')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Tab -->
+            <div id="download" class="tab-content">
+                <div class="api-grid">
+                    <!-- YouTube MP3 -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fab fa-youtube"></i> YouTube to MP3</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /download/ytmp3?url=YOUTUBE_URL
+                            <button class="copy-btn" onclick="copyToClipboard('/download/ytmp3?url=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                                                    </div>
+                        <p class="api-description">
+                            Download YouTube videos as MP3 audio files. Perfect for music and podcasts.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>url</code> (required) - YouTube video URL
+                        </div>
+                        <div class="response-example">
+<span class="json-key">{</span>
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"title"</span>: <span class="json-string">"Video Title"</span>,
+  <span class="json-key">"downloadUrl"</span>: <span class="json-string">"https://..."</span>
+<span class="json-key">}</span>
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/download/ytmp3?url=https://youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/download/ytmp3?url=YOUTUBE_URL')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- YouTube MP4 -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fab fa-youtube"></i> YouTube to MP4</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /download/ytmp4?url=YOUTUBE_URL
+                            <button class="copy-btn" onclick="copyToClipboard('/download/ytmp4?url=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Download YouTube videos in MP4 format. High quality video downloads.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>url</code> (required) - YouTube video URL
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/download/ytmp4?url=https://youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/download/ytmp4?url=YOUTUBE_URL')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TikTok Download -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fab fa-tiktok"></i> TikTok Downloader</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /download/tiktok?url=TIKTOK_URL
+                            <button class="copy-btn" onclick="copyToClipboard('/download/tiktok?url=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Download TikTok videos without watermark. Get high-quality TikTok content.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>url</code> (required) - TikTok video URL
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/download/tiktok?url=https://tiktok.com/@user/video/123')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/download/tiktok?url=TIKTOK_URL')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Download -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fab fa-instagram"></i> Instagram Downloader</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /download/instagram?url=INSTAGRAM_URL
+                            <button class="copy-btn" onclick="copyToClipboard('/download/instagram?url=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Download Instagram photos, videos, and reels easily.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>url</code> (required) - Instagram post URL
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/download/instagram?url=https://instagram.com/p/ABC123')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/download/instagram?url=INSTAGRAM_URL')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Tab -->
+            <div id="search" class="tab-content">
+                <div class="api-grid">
+                    <!-- YouTube Search -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fab fa-youtube"></i> YouTube Search</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /search/youtube?q=YOUR_QUERY
+                            <button class="copy-btn" onclick="copyToClipboard('/search/youtube?q=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Search for YouTube videos and get detailed results.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>q</code> (required) - Search query
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/search/youtube?q=music')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/search/youtube?q=YOUR_QUERY')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lyrics Search -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-music"></i> Lyrics Search</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /search/lyrics?q=SONG_NAME
+                            <button class="copy-btn" onclick="copyToClipboard('/search/lyrics?q=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Search for song lyrics by title or artist.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>q</code> (required) - Song name or artist
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/search/lyrics?q=imagine')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/search/lyrics?q=SONG_NAME')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Random Tab -->
+            <div id="random" class="tab-content">
+                <div class="api-grid">
+                    <!-- Random Anime -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-dragon"></i> Random Anime</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /random/anime
+                            <button class="copy-btn" onclick="copyToClipboard('/random/anime')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get random anime character images. Perfect for anime lovers!
+                        </p>
+                        <div class="response-example">
+<span class="json-key">{</span>
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"url"</span>: <span class="json-string">"https://..."</span>
+<span class="json-key">}</span>
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/random/anime')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/random/anime')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Random Cat -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-cat"></i> Random Cat</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /random/cat
+                            <button class="copy-btn" onclick="copyToClipboard('/random/cat')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get random cute cat pictures. Brighten your day!
+                        </p>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/random/cat')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/random/cat')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Random Dog -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-dog"></i> Random Dog</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /random/dog
+                            <button class="copy-btn" onclick="copyToClipboard('/random/dog')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get random dog pictures from various breeds.
+                        </p>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/random/dog')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/random/dog')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Random Meme -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-laugh"></i> Random Meme</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /random/meme
+                            <button class="copy-btn" onclick="copyToClipboard('/random/meme')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get random memes from popular subreddits.
+                        </p>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/random/meme')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/random/meme')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Tab -->
+            <div id="tools" class="tab-content">
+                <div class="api-grid">
+                    <!-- QR Code -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-qrcode"></i> QR Code Generator</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /tools/qrcode?text=YOUR_TEXT
+                            <button class="copy-btn" onclick="copyToClipboard('/tools/qrcode?text=')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Generate QR codes from any text or URL.
+                        </p>
+                        <div class="params">
+                            <strong><i class="fas fa-code"></i> Parameters:</strong><br>
+                            • <code>text</code> (required) - Text or URL to encode
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/tools/qrcode?text=Hello World')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/tools/qrcode?text=YOUR_TEXT')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Random Joke -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-laugh-beam"></i> Random Joke</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /tools/joke
+                            <button class="copy-btn" onclick="copyToClipboard('/tools/joke')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get random programming jokes to brighten your day!
+                        </p>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/tools/joke')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/tools/joke')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Tab -->
+            <div id="info" class="tab-content">
+                <div class="api-grid">
+                    <!-- API Info -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-info-circle"></i> API Information</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /api/info
+                            <button class="copy-btn" onclick="copyToClipboard('/api/info')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Get detailed information about this API.
+                        </p>
+                        <div class="response-example">
+<span class="json-key">{</span>
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"Ladybug API"</span>,
+  <span class="json-key">"version"</span>: <span class="json-string">"v1.0.0"</span>
+<span class="json-key">}</span>
+                        </div>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/api/info')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/api/info')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- API Status -->
+                    <div class="api-card">
+                        <div class="api-card-header">
+                            <h3><i class="fas fa-server"></i> API Status</h3>
+                            <span class="method-badge get">GET</span>
+                        </div>
+                        <div class="api-path">
+                            /api/status
+                            <button class="copy-btn" onclick="copyToClipboard('/api/status')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <p class="api-description">
+                            Check the current status of the API server.
+                        </p>
+                        <div class="api-actions">
+                            <button class="btn btn-primary" onclick="tryAPI('/api/status')">
+                                <i class="fas fa-play"></i> Try It Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="copyToClipboard('/api/status')">
+                                <i class="fas fa-copy"></i> Copy URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="about">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-bug"></i> Ladybug API</h3>
+                <p>A powerful and easy-to-use REST API for modern developers. Free, fast, and reliable.</p>
+                <div class="social-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="#" title="Telegram"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#status">Status</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#" onclick="showTab('ai'); return false;">AI Tools</a></li>
+                    <li><a href="#" onclick="showTab('download'); return false;">Downloads</a></li>
+                    <li><a href="#" onclick="showTab('search'); return false;">Search</a></li>
+                    <li><a href="#" onclick="showTab('random'); return false;">Random</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2024 Ladybug API. All rights reserved. Made with <i class="fas fa-heart" style="color: #ef4444;"></i> by Developers</p>
+        </div>
+    </footer>
+
     <script>
-        function tryAPI(endpoint) {
-            const baseUrl = window.location.origin;
-            const fullUrl = baseUrl + endpoint;
-            window.open(fullUrl, '_blank');
+        // Tab Switching Function
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.closest('.tab-btn').classList.add('active');
+
+            // Scroll to tabs container
+            document.querySelector('.tabs-container').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
         }
+
+        // Copy to Clipboard Function
+        function copyToClipboard(text) {
+            const baseURL = window.location.origin;
+            const fullURL = baseURL + text;
+            
+            navigator.clipboard.writeText(fullURL).then(() => {
+                // Create toast notification
+                const toast = document.createElement('div');
+                toast.innerHTML = '<i class="fas fa-check"></i> Copied to clipboard!';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    right: 30px;
+                    background: linear-gradient(135deg, var(--primary), var(--secondary));
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-weight: 600;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        // Try API Function
+        function tryAPI(endpoint) {
+            const baseURL = window.location.origin;
+            const fullURL = baseURL + endpoint;
+            window.open(fullURL, '_blank');
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const apiCards = document.querySelectorAll('.api-card');
+            
+            apiCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('.api-description').textContent.toLowerCase();
+                const path = card.querySelector('.api-path').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || path.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
+
+                
