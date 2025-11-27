@@ -15,8 +15,8 @@ app.use(express.static('public'));
 // API Configuration
 const API_CONFIG = {
   name: "Ladybug Api'S",
-  version: "v1.0.0",
-  description: "Simple and easy to use API.",
+  version: "v2.0.0",
+  description: "Simple and easy to use API with enhanced features.",
   creator: "Ntando Mods Team",
   status: "Active!"
 };
@@ -166,6 +166,340 @@ app.get('/ai/translate', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to translate',
+      message: error.message
+    });
+  }
+});
+
+// ============================================
+// SHAZAM API - MUSIC RECOGNITION
+// ============================================
+
+app.get('/music/shazam', async (req, res) => {
+  try {
+    const { q, track } = req.query;
+    const query = q || track;
+    
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "q" or "track" is required'
+      });
+    }
+
+    try {
+      // Using Shazam API alternative for music search
+      const response = await axios.get(`https://shazam.p.rapidapi.com/search`, {
+        params: { term: query, limit: 10 },
+        headers: {
+          'X-RapidAPI-Key': process.env.RAPIDAPI_KEY || 'demo',
+          'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+        }
+      });
+
+      if (response.data && response.data.tracks) {
+        const tracks = response.data.tracks.hits.map(hit => ({
+          title: hit.track.title,
+          artist: hit.track.subtitle,
+          albumArt: hit.track.images?.coverart,
+          preview: hit.track.hub?.actions?.[1]?.uri,
+          shazamUrl: hit.track.url,
+          key: hit.track.key
+        }));
+
+        res.json({
+          success: true,
+          query: query,
+          count: tracks.length,
+          tracks: tracks
+        });
+      } else {
+        res.json({
+          success: false,
+          error: 'No results found',
+          note: 'Add RAPIDAPI_KEY for full functionality'
+        });
+      }
+    } catch (apiError) {
+      // Fallback mock data
+      res.json({
+        success: true,
+        query: query,
+        count: 1,
+        tracks: [{
+          title: 'Mock Track',
+          artist: 'Mock Artist',
+          note: 'Set RAPIDAPI_KEY environment variable for real Shazam results',
+          instructions: 'Get your free API key from https://rapidapi.com/apidojo/api/shazam'
+        }]
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to search music',
+      message: error.message
+    });
+  }
+});
+
+// Shazam - Recognize Song from Audio URL
+app.get('/music/recognize', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required (audio file URL)'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Audio recognition endpoint',
+      note: 'This endpoint requires audio processing. Use /music/shazam for track search.',
+      audioUrl: url
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to recognize audio',
+      message: error.message
+    });
+  }
+});
+
+// Spotify Search
+app.get('/music/spotify', async (req, res) => {
+  try {
+    const { q, type = 'track' } = req.query;
+    
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "q" is required'
+      });
+    }
+
+    res.json({
+      success: true,
+      query: q,
+      type: type,
+      note: 'Spotify API requires authentication. Use Shazam endpoint for music search.',
+      alternative: `/music/shazam?q=${encodeURIComponent(q)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to search Spotify',
+      message: error.message
+    });
+  }
+});
+
+// ============================================
+// URL SHORTENER APIs
+// ============================================
+
+// TinyURL - URL Shortener
+app.get('/tools/tinyurl', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    // Validate URL
+    try {
+      new URL(url);
+    } catch (e) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid URL format'
+      });
+    }
+
+    try {
+      const response = await axios.get(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`);
+      
+      res.json({
+        success: true,
+        originalUrl: url,
+        shortUrl: response.data,
+        service: 'TinyURL'
+      });
+    } catch (apiError) {
+      res.status(500).json({
+        success: false,
+        error: 'TinyURL service unavailable',
+        message: 'Please try again later'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to shorten URL',
+      message: error.message
+    });
+  }
+});
+
+// Is.gd - Alternative URL Shortener
+app.get('/tools/shorturl', async (req, res) => {
+  try {
+    const { url, custom } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    // Validate URL
+    try {
+      new URL(url);
+    } catch (e) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid URL format'
+      });
+    }
+
+    try {
+      const params = {
+        format: 'json',
+        url: url
+      };
+
+      if (custom) {
+        params.shorturl = custom;
+      }
+
+      const response = await axios.get('https://is.gd/create.php', { params });
+      
+      res.json({
+        success: true,
+        originalUrl: url,
+        shortUrl: response.data.shorturl,
+        service: 'is.gd',
+        custom: custom || false
+      });
+    } catch (apiError) {
+      res.status(500).json({
+        success: false,
+        error: 'URL shortener service unavailable',
+        message: apiError.response?.data?.errormessage || 'Please try again later'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to shorten URL',
+      message: error.message
+    });
+  }
+});
+
+// V.gd - Another Alternative URL Shortener
+app.get('/tools/vgd', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    try {
+      new URL(url);
+    } catch (e) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid URL format'
+      });
+    }
+
+    try {
+      const response = await axios.get('https://v.gd/create.php', {
+        params: {
+          format: 'json',
+          url: url
+        }
+      });
+      
+      res.json({
+        success: true,
+        originalUrl: url,
+        shortUrl: response.data.shorturl,
+        service: 'v.gd'
+      });
+    } catch (apiError) {
+      res.status(500).json({
+        success: false,
+        error: 'URL shortener service unavailable',
+        message: 'Please try again later'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to shorten URL',
+      message: error.message
+    });
+  }
+});
+
+// URL Expander - Expand Short URLs
+app.get('/tools/expandurl', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    try {
+      const response = await axios.get(url, {
+        maxRedirects: 0,
+        validateStatus: (status) => status >= 200 && status < 400
+      });
+      
+      res.json({
+        success: true,
+        shortUrl: url,
+        expandedUrl: response.request.res.responseUrl || url,
+        redirects: response.request._redirectable._redirectCount || 0
+      });
+    } catch (error) {
+      if (error.response && error.response.headers.location) {
+        res.json({
+          success: true,
+          shortUrl: url,
+          expandedUrl: error.response.headers.location
+        });
+      } else {
+        res.json({
+          success: false,
+          error: 'Could not expand URL',
+          shortUrl: url
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to expand URL',
       message: error.message
     });
   }
