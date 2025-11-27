@@ -1,0 +1,14 @@
+services:
+  # A Docker service running a Python web application
+  - type: web
+    name: ladybug-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health
