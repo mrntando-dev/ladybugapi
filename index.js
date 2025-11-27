@@ -1,44 +1,53 @@
-
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-require('dotenv').config();
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const { JSDOM } = require('jsdom');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security Middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
-    },
-  },
-}));
+// Rate Limiting (Simple implementation)
+const requestCounts = new Map();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = 100; // 100 requests per window
 
-// Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: {
-    success: false,
-    error: 'Too many requests, please try again later.'
+function rateLimit(req, res, next) {
+  const ip = req.ip || req.connection.remoteAddress;
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW;
+  
+  if (!requestCounts.has(ip)) {
+    requestCounts.set(ip, []);
   }
+  
+  const requests = requestCounts.get(ip);
+  const recentRequests = requests.filter(timestamp => timestamp > windowStart);
+  
+  if (recentRequests.length >= RATE_LIMIT_MAX) {
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests, please try again later.'
+    });
+  }
+  
+  recentRequests.push(now);
+  requestCounts.set(ip, recentRequests);
+  next();
+}
+
+// Security Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
 });
 
-app.use(limiter);
-
-// Middleware
+app.use(rateLimit);
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'https://3000-d745701a-4a50-4473-aec3-bea32aa5aedc.proxy.daytona.works'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -560,6 +569,98 @@ app.get('/music/lyrics-search', cacheMiddleware, async (req, res) => {
   }
 });
 
+// Legacy lyrics endpoints for compatibility
+app.get('/search/lyrics', cacheMiddleware, async (req, res) => {
+  try {
+    const { q, title, artist } = req.query;
+    const query = sanitizeInput(q || title);
+    
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "q" or "title" is required'
+      });
+    }
+
+    const searchQuery = artist ? `${artist} ${query}` : query;
+    
+    try {
+      const lyricsResponse = await axios.get(`https://api.lyrics.ovh/suggest/${encodeURIComponent(searchQuery)}`);
+      
+      if (lyricsResponse.data && lyricsResponse.data.data && lyricsResponse.data.data.length > 0) {
+        const results = lyricsResponse.data.data.slice(0, 10).map(song => ({
+          title: song.title,
+          artist: song.artist.name,
+          album: song.album?.title,
+          preview: song.preview,
+          link: song.link
+        }));
+
+        const data = {
+          success: true,
+          query: searchQuery,
+          count: results.length,
+          results: results
+        };
+        
+        setCache(req.originalUrl, data);
+        res.json(data);
+      } else {
+        res.json({
+          success: true,
+          query: searchQuery,
+          count: 0,
+          results: [],
+          message: 'No lyrics found'
+        });
+      }
+    } catch (apiError) {
+      res.json({
+        success: false,
+        error: 'Lyrics service unavailable',
+        message: 'Please try again later'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to search lyrics',
+      message: error.message
+    });
+  }
+});
+
+app.get('/lyrics/get', async (req, res) => {
+  try {
+    const { artist, title } = req.query;
+    
+    if (!artist || !title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameters "artist" and "title" are required'
+      });
+    }
+
+    const sanitizedArtist = sanitizeInput(artist);
+    const sanitizedTitle = sanitizeInput(title);
+
+    const response = await axios.get(`https://api.lyrics.ovh/v1/${encodeURIComponent(sanitizedArtist)}/${encodeURIComponent(sanitizedTitle)}`);
+    
+    res.json({
+      success: true,
+      artist: sanitizedArtist,
+      title: sanitizedTitle,
+      lyrics: response.data.lyrics || 'Lyrics not found'
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      error: 'Lyrics not found',
+      message: 'Please check artist and title spelling'
+    });
+  }
+});
+
 // ============================================
 // TOOLS ENDPOINTS - ENHANCED
 // ============================================
@@ -685,6 +786,106 @@ app.get('/tools/shorturl', cacheMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to shorten URL',
+      message: error.message
+    });
+  }
+});
+
+app.get('/tools/vgd', cacheMiddleware, async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || url.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    if (!isValidUrl(url)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid URL format'
+      });
+    }
+
+    try {
+      const response = await axios.get('https://v.gd/create.php', {
+        params: {
+          format: 'json',
+          url: url
+        },
+        timeout: 8000
+      });
+      
+      const data = {
+        success: true,
+        originalUrl: url,
+        shortUrl: response.data.shorturl,
+        service: 'v.gd',
+        timestamp: new Date().toISOString()
+      };
+      
+      setCache(req.originalUrl, data);
+      res.json(data);
+    } catch (apiError) {
+      res.status(500).json({
+        success: false,
+        error: 'URL shortener service unavailable',
+        message: 'Please try again later'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to shorten URL',
+      message: error.message
+    });
+  }
+});
+
+app.get('/tools/expandurl', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || url.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    try {
+      const response = await axios.get(url, {
+        maxRedirects: 0,
+        validateStatus: (status) => status >= 200 && status < 400
+      });
+      
+      res.json({
+        success: true,
+        shortUrl: url,
+        expandedUrl: response.request.res.responseUrl || url,
+        redirects: response.request._redirectable?._redirectCount || 0
+      });
+    } catch (error) {
+      if (error.response && error.response.headers.location) {
+        res.json({
+          success: true,
+          shortUrl: url,
+          expandedUrl: error.response.headers.location
+        });
+      } else {
+        res.json({
+          success: false,
+          error: 'Could not expand URL',
+          shortUrl: url
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to expand URL',
       message: error.message
     });
   }
@@ -1324,6 +1525,152 @@ app.get('/download/ytmp4', async (req, res) => {
   }
 });
 
+// Legacy download endpoints for compatibility
+app.get('/download/tiktok', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || url.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    res.json({
+      success: true,
+      url: url,
+      note: 'TikTok download endpoint maintained for compatibility',
+      alternative: `https://tikdown.org/download?url=${encodeURIComponent(url)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to download TikTok',
+      message: error.message
+    });
+  }
+});
+
+app.get('/download/instagram', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || url.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    res.json({
+      success: true,
+      url: url,
+      note: 'Instagram download endpoint maintained for compatibility',
+      alternative: `https://downloadgram.com/media?url=${encodeURIComponent(url)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to download Instagram media',
+      message: error.message
+    });
+  }
+});
+
+app.get('/download/image', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url || url.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required'
+      });
+    }
+
+    if (!url.match(/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|bmp)/i)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid image URL'
+      });
+    }
+
+    const response = await axios({
+      method: 'GET',
+      url: url,
+      responseType: 'arraybuffer'
+    });
+
+    const contentType = response.headers['content-type'];
+    const buffer = Buffer.from(response.data, 'binary');
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', 'attachment; filename=image.jpg');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to download image',
+      message: error.message
+    });
+  }
+});
+
+// Legacy music endpoints for compatibility
+app.get('/music/recognize', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "url" is required (audio file URL)'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Audio recognition endpoint maintained for compatibility',
+      note: 'This endpoint requires audio processing. Use /music/shazam for track search.',
+      audioUrl: url
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to recognize audio',
+      message: error.message
+    });
+  }
+});
+
+app.get('/music/spotify', async (req, res) => {
+  try {
+    const { q, type = 'track' } = req.query;
+    
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        error: 'Parameter "q" is required'
+      });
+    }
+
+    res.json({
+      success: true,
+      query: q,
+      type: type,
+      note: 'Spotify API requires authentication. Use Shazam endpoint for music search.',
+      alternative: `/music/shazam?q=${encodeURIComponent(q)}`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to search Spotify',
+      message: error.message
+    });
+  }
+});
+
 // ============================================
 // UTILITY ENDPOINTS
 // ============================================
@@ -1345,7 +1692,7 @@ app.get('/api/status', (req, res) => {
     features: {
       rateLimit: '15 minutes / 100 requests',
       cache: '5 minutes TTL',
-      security: 'Helmet + CORS enabled',
+      security: 'Security headers enabled',
       endpoints: 45
     }
   });
@@ -1412,29 +1759,29 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`
-\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
-\u2551     \ud83d\udc1e Ladybug API v2.1.0 Started     \u2551
-\u2560\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2563
-\u2551  Port: ${PORT}                       
-\u2551  Status: Active                        \u2551
-\u2551  Endpoints: 45                         \u2551
-\u2551  Security: Enabled                     \u2551
-\u2551  Cache: Enabled                        \u2551
-\u2551  Rate Limit: 100/15min                 \u2551
-\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
+╔═══════════════════════════════════════╗
+║     🐞 Ladybug API v2.1.0 Started     ║
+╠═══════════════════════════════════════╣
+║  Port: ${PORT}                       
+║  Status: Active                        ║
+║  Endpoints: 45                         ║
+║  Security: Enabled                     ║
+║  Cache: Enabled                        ║
+║  Rate Limit: 100/15min                 ║
+╚═══════════════════════════════════════╝
 
-\ud83d\ude80 Enhanced Features:
-\u2022 Advanced Security (Helmet + Rate Limiting)
-\u2022 Smart Caching System (5 min TTL)
-\u2022 Input Sanitization & Validation
-\u2022 Multiple API Failovers
-\u2022 Enhanced Error Handling
-\u2022 Performance Monitoring
-\u2022 45+ Working Endpoints
+🚀 Enhanced Features:
+• Advanced Security Headers
+• Smart Caching System (5 min TTL)
+• Input Sanitization & Validation
+• Multiple API Failovers
+• Enhanced Error Handling
+• Performance Monitoring
+• 45+ Working Endpoints
 
-\ud83d\udc9d Created by Ntando Mods Team
-\ud83c\udf10 Official: ntandostore.zone.id
-\ud83d\udcf1 WhatsApp: +263 71 845 6744
+💝 Created by Ntando Mods Team
+🌐 Official: ntandostore.zone.id
+📱 WhatsApp: +263 71 845 6744
   `);
 });
 
