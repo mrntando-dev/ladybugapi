@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladybug API - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 1.8em;
+        }
+
+        .api-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .api-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .api-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .api-card .path {
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            color: #495057;
+            word-break: break-all;
+        }
+
+        .api-card .method {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .api-card .description {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .try-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .try-btn:hover {
+            background: #764ba2;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .param {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐞 Ladybug API</h1>
+            <p>Simple and Easy to Use REST API</p>
+            <span class="badge">v1.0.0 - Active!</span>
+        </div>
+
+        <div class="content">
+            <!-- AI Tools Section -->
+            <div class="section">
+                <h2>🤖 AI Tools</h2>
+                
+                <div class="api-card">
+                    <h3>ChatGPT</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/ai/chatgpt?text=YOUR_MESSAGE</div>
+                    <div class="description">Talk with an AI chatbot powered by ChatGPT-like technology</div>
+                    <div class="param">
+                        <strong>Parameter:</strong> text (required) - Your message to the AI
+                    </div>
+                    <div class="example">
+                        {
+  "success": true,
+  "query": "Hello",
+  "response": "Hi! How can I help you?"
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/ai/chatgpt?text=Hello')">Try It</button>
+                </div>
+            </div>
+
+            <!-- Random Section -->
+            <div class="section">
+                <h2>🎲 Random</h2>
+                
+                <div class="api-card">
+                    <h3>Random Anime Image</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/random/anime</div>
+                    <div class="description">Get random anime character images</div>
+                    <div class="example">
+                        {
+  "success": true,
+  "url": "https://..."
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/random/anime')">Try It</button>
+                </div>
+
+                <div class="api-card">
+                    <h3>Random Cat Image</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/random/cat</div>
+                    <div class="description">Get random cute cat pictures</div>
+                    <div class="example">
+                        {
+  "success": true,
+  "url": "https://..."
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/random/cat')">Try It</button>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="section">
+                <h2>🔍 Search Tools</h2>
+                
+                <div class="api-card">
+                    <h3>YouTube Search</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/search/youtube?q=YOUR_QUERY</div>
+                    <div class="description">Search for YouTube videos</div>
+                    <div class="param">
+                        <strong>Parameter:</strong> q (required) - Search query
+                    </div>
+                    <div class="example">
+                        {
+  "success": true,
+  "query": "music",
+  "results": [...]
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/search/youtube?q=music')">Try It</button>
+                </div>
+            </div>
+
+            <!-- Tools Section -->
+            <div class="section">
+                <h2>🛠️ Tools</h2>
+                
+                <div class="api-card">
+                    <h3>Random Joke</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/tools/joke</div>
+                    <div class="description">Get a random programming joke</div>
+                    <div class="example">
+                        {
+  "success": true,
+  "setup": "Why do programmers...",
+  "punchline": "Because..."
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/tools/joke')">Try It</button>
+                </div>
+
+                <div class="api-card">
+                    <h3>QR Code Generator</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/tools/qrcode?text=YOUR_TEXT</div>
+                    <div class="description">Generate QR codes from text</div>
+                    <div class="param">
+                        <strong>Parameter:</strong> text (required) - Text to encode
+                    </div>
+                    <div class="example">
+                        {
+  "success": true,
+  "text": "Hello",
+  "qrCode": "https://..."
+}
+                    </div>
+                    <button class="try-btn" onclick="tryAPI('/tools/qrcode?text=Hello')">Try It</button>
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            <div class="section">
+                <h2>📊 Status</h2>
+                
+                <div class="api-card">
+                    <h3>API Status</h3>
+                    <span class="method">GET</span>
+                    <div class="path">/api/status</div>
+                    <div class="description">Check API server status and uptime</div>
+                    <button class="try-btn" onclick="tryAPI('/api/status')">Try It</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Ladybug API - Created by Ntando Mods Team</p>
+            <p>Made with ❤️ for developers</p>
+        </div>
+    </div>
+
+    <script>
+        function tryAPI(endpoint) {
+            const baseUrl = window.location.origin;
+            const fullUrl = baseUrl + endpoint;
+            window.open(fullUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
