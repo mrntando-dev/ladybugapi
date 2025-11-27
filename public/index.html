@@ -4,30 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ladybug API v2.2.0 - Premium REST API | 60+ Free Endpoints</title>
-    <meta name="description" content="Premium REST API with 60+ endpoints - Completely Free! AI, Business, Developer Tools, Social Media, and more. No API key required.">
-    <meta name="keywords" content="API, REST, Free API, Premium API, AI API, Developer Tools, No API Key">
-    <meta name="author" content="Ntando Mods Team">
+    <title>Ladybug API - Test All 65+ Endpoints</title>
+    <meta name="description" content="Test all 65+ API endpoints with one click - Complete API testing suite">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #e83e8c;
-            --secondary-color: #6f42c1;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --dark-color: #2c3e50;
-            --light-color: #f8f9fa;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --ladybug-gradient: linear-gradient(135deg, #e83e8c 0%, #6f42c1 100%);
+            --primary: #e83e8c;
+            --secondary: #6f42c1;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, #e83e8c 0%, #6f42c1 100%);
         }
 
         * {
@@ -40,284 +37,410 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            overflow-x: hidden;
+            font-size: 14px;
         }
 
-        /* Hero Section */
-        .hero-section {
-            background: var(--ladybug-gradient);
+        /* Header */
+        .hero-header {
+            background: var(--gradient);
             color: white;
-            padding: 100px 0 80px;
+            padding: 40px 0;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .hero-section::before {
+        .hero-header::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff10" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-            background-size: cover;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
-        .ladybug-logo {
+        .logo {
             font-size: 4rem;
             color: #ff6b6b;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 20px 0;
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            opacity: 0.9;
             margin-bottom: 30px;
-            opacity: 0.95;
         }
 
-        .premium-badge {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #333;
-            padding: 8px 20px;
+        .test-all-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
             border-radius: 50px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            animation: pulse 2s infinite;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 10px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .test-all-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
-        /* Feature Cards */
-        .feature-card {
+        /* Main Container */
+        .main-container {
+            padding: 40px 20px;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
             background: white;
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: var(--ladybug-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--dark-color);
-        }
-
-        .feature-description {
-            color: #6c757d;
-            margin-bottom: 20px;
-        }
-
-        .endpoint-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .endpoint-list li {
-            background: var(--light-color);
-            padding: 8px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--dark-color);
-            transition: all 0.2s ease;
-        }
-
-        .endpoint-list li:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        /* API Test Section */
-        .api-test-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 40px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .test-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: var(--dark-color);
-        }
-
-        .test-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-control, .form-select {
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
-            padding: 12px 15px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(232, 62, 140, 0.25);
-        }
-
-        .btn-primary-custom {
-            background: var(--ladybug-gradient);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 30px;
-            font-weight: 600;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(232, 62, 140, 0.3);
-        }
-
-        .result-box {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid var(--success-color);
-            display: none;
-        }
-
-        .code-block {
-            background: var(--dark-color);
-            color: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            background: white;
-            padding: 60px 0;
-            margin: 60px 0;
         }
 
         .stat-card {
             text-align: center;
-            padding: 30px;
+            padding: 20px;
         }
 
         .stat-number {
             font-size: 3rem;
             font-weight: 800;
-            background: var(--ladybug-gradient);
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
         }
 
         .stat-label {
-            font-size: 1.2rem;
             color: #6c757d;
             font-weight: 500;
+            margin-top: 5px;
         }
 
-        /* Documentation Section */
-        .doc-section {
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .progress-container.show {
+            display: block;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: var(--light);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tab-btn:hover {
+            background: var(--gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Endpoint Grid */
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .endpoint-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .endpoint-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .endpoint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .endpoint-card.testing {
+            animation: testing-pulse 1s infinite;
+        }
+
+        @keyframes testing-pulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 5px 30px rgba(232, 62, 140, 0.4); }
+        }
+
+        .endpoint-card.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .endpoint-card.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .endpoint-icon {
+            font-size: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .endpoint-title {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .endpoint-description {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .test-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(232, 62, 140, 0.3);
+        }
+
+        .test-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-idle { background: #6c757d; }
+        .status-testing { background: var(--warning); animation: pulse 1s infinite; }
+        .status-success { background: var(--success); }
+        .status-error { background: var(--danger); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Response Modal */
+        .response-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .response-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            margin: 40px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
+            position: relative;
         }
 
-        .endpoint-example {
-            background: #f8f9fa;
-            border-radius: 10px;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6c757d;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--danger);
+        }
+
+        .response-content {
+            background: #2c3e50;
+            color: #f8f9fa;
             padding: 20px;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary-color);
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .method-badge {
-            display: inline-block;
+        .response-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .response-badge {
             padding: 4px 12px;
             border-radius: 20px;
-            font-weight: 600;
             font-size: 0.8rem;
-            margin-right: 10px;
+            font-weight: 600;
         }
 
-        .method-get { background: #28a745; color: white; }
-        .method-post { background: #007bff; color: white; }
+        .badge-success { background: var(--success); color: white; }
+        .badge-error { background: var(--danger); color: white; }
 
-        /* Footer */
-        footer {
-            background: var(--dark-color);
-            color: white;
-            padding: 40px 0 20px;
-            margin-top: 80px;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
+        /* Loading Spinner */
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
 
         @keyframes spin {
@@ -325,554 +448,513 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero-title { font-size: 2rem; }
-            .hero-subtitle { font-size: 1.2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .endpoint-grid { grid-template-columns: 1fr; }
             .stat-number { font-size: 2rem; }
-            .ladybug-logo { font-size: 3rem; }
+            .logo { font-size: 3rem; }
+            .test-all-btn { padding: 15px 30px; font-size: 1rem; }
+            .filter-tabs { padding: 15px; }
+            .tab-btn { padding: 8px 15px; font-size: 0.8rem; }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
         }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container hero-content">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <div class="text-center text-lg-start">
-                        <div class="ladybug-logo">
-                            <i class="fas fa-bug"></i>
-                        </div>
-                        <h1 class="hero-title" data-aos="fade-up">Ladybug API v2.2.0</h1>
-                        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                            Premium REST API with 60+ Endpoints
-                        </p>
-                        <div class="premium-badge" data-aos="fade-up" data-aos-delay="200">
-                            <i class="fas fa-crown"></i> COMPLETELY FREE - PREMIUM FEATURES
-                        </div>
-                        <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
-                            <button class="btn btn-light btn-lg me-3" onclick="scrollToTest()">
-                                <i class="fas fa-play"></i> Try API Now
-                            </button>
-                            <button class="btn btn-outline-light btn-lg" onclick="scrollToDocs()">
-                                <i class="fas fa-book"></i> Documentation
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center" data-aos="fade-left">
-                        <div class="bg-white bg-opacity-10 rounded-3 p-4">
-                            <h5 class="mb-3"><i class="fas fa-server"></i> API Status</h5>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Status:</span>
-                                <span class="text-success"><i class="fas fa-circle"></i> Active</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Uptime:</span>
-                                <span id="uptime">Loading...</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Endpoints:</span>
-                                <span>60</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Version:</span>
-                                <span>v2.2.0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats-section">
+    <!-- Hero Header -->
+    <header class="hero-header">
         <div class="container">
+            <div class="logo">
+                <i class="fas fa-bug"></i>
+            </div>
+            <h1 class="hero-title">Ladybug API Complete Testing Suite</h1>
+            <p class="hero-subtitle">Test ALL 65+ Endpoints with ZERO Effort - One Click Wonder!</p>
+            <div>
+                <button class="test-all-btn" onclick="testAllEndpoints()">
+                    <i class="fas fa-rocket"></i> Test All 65+ APIs Automatically
+                </button>
+                <button class="test-all-btn" onclick="testCategory('ai')">
+                    <i class="fas fa-brain"></i> Test AI Only
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container main-container">
+        <!-- Stats Dashboard -->
+        <div class="stats-dashboard">
             <div class="row">
-                <div class="col-md-3 col-6" data-aos="fade-up">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
-                        <div class="stat-number" data-counter="60">0</div>
-                        <div class="stat-label">Premium Endpoints</div>
+                        <div class="stat-number" id="totalEndpoints">65</div>
+                        <div class="stat-label">Total Endpoints</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
-                        <div class="stat-number" data-counter="100">0</div>
-                        <div class="stat-label">% Free</div>
+                        <div class="stat-number" id="testedCount">0</div>
+                        <div class="stat-label">Tested</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
-                        <div class="stat-number" data-counter="0">0</div>
-                        <div class="stat-label">API Key Required</div>
+                        <div class="stat-number" id="successCount">0</div>
+                        <div class="stat-label">Successful</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
-                        <div class="stat-number"><i class="fas fa-infinity"></i></div>
-                        <div class="stat-label">Unlimited Requests</div>
+                        <div class="stat-number" id="avgResponseTime">0ms</div>
+                        <div class="stat-label">Avg Response</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="container my-5">
-        <div class="text-center mb-5">
-            <h2 class="display-4 fw-bold text-white" data-aos="fade-up">Premium Features</h2>
-            <p class="lead text-white" data-aos="fade-up" data-aos-delay="100">All advanced features are completely free</p>
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer">
+            <h5><i class="fas fa-cogs"></i> Testing Progress</h5>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% Complete - Ready to test all endpoints</div>
         </div>
 
-        <div class="row">
-            <!-- AI APIs -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3 class="feature-title">AI APIs</h3>
-                    <p class="feature-description">Advanced artificial intelligence endpoints powered by cutting-edge models</p>
-                    <ul class="endpoint-list">
-                        <li>/ai/chatgpt - Premium AI Chat</li>
-                        <li>/ai/texttoimg - AI Image Generation</li>
-                        <li>/ai/writer - Content Creation</li>
-                        <li>/ai/translate - Language Translation</li>
-                        <li>/ai/summarize - Text Summarization</li>
-                        <li>/ai/sentiment - Sentiment Analysis</li>
-                        <li>/ai/grammar - Grammar Check</li>
-                        <li>/ai/keyword - Keyword Extraction</li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="tab-btn active" onclick="filterEndpoints('all')">
+                <i class="fas fa-globe"></i> All APIs (65)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('ai')">
+                <i class="fas fa-brain"></i> AI APIs (8)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('business')">
+                <i class="fas fa-briefcase"></i> Business (3)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('dev')">
+                <i class="fas fa-code"></i> Dev Tools (3)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('social')">
+                <i class="fas fa-share"></i> Social (2)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('data')">
+                <i class="fas fa-database"></i> Data (2)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('system')">
+                <i class="fas fa-server"></i> System (3)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('music')">
+                <i class="fas fa-music"></i> Music (5)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('tools')">
+                <i class="fas fa-tools"></i> Tools (10)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('random')">
+                <i class="fas fa-dice"></i> Random (8)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('search')">
+                <i class="fas fa-search"></i> Search (8)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('download')">
+                <i class="fas fa-download"></i> Download (8)
+            </button>
+            <button class="tab-btn" onclick="filterEndpoints('image')">
+                <i class="fas fa-image"></i> Image (5)
+            </button>
+        </div>
 
-            <!-- Business Tools -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <h3 class="feature-title">Business Tools</h3>
-                    <p class="feature-description">Professional business and productivity APIs</p>
-                    <ul class="endpoint-list">
-                        <li>/business/email-validator - Email Validation</li>
-                        <li>/business/phone-validator - Phone Validation</li>
-                        <li>/business/color-palette - Color Generation</li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Endpoint Grid -->
+        <div class="endpoint-grid" id="endpointGrid">
+            <!-- Endpoints will be generated here -->
+        </div>
+    </div>
 
-            <!-- Developer Tools -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="feature-title">Developer Tools</h3>
-                    <p class="feature-description">Essential utilities for developers</p>
-                    <ul class="endpoint-list">
-                        <li>/dev/json-formatter - JSON Formatting</li>
-                        <li>/dev/base64-encoder - Base64 Encoding</li>
-                        <li>/dev/uuid-generator - UUID Generation</li>
-                    </ul>
-                </div>
+    <!-- Response Modal -->
+    <div class="response-modal" id="responseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">API Response</h3>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-
-            <!-- Social Media -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-share-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Social Media</h3>
-                    <p class="feature-description">Social media integration tools</p>
-                    <ul class="endpoint-list">
-                        <li>/social/twitter-screenshot - Twitter Screenshots</li>
-                        <li>/social/instagram-downloader - Instagram Downloads</li>
-                    </ul>
-                </div>
+            <div class="response-info">
+                <span>Status: <span class="response-badge badge-success" id="responseStatus">Success</span></span>
+                <span>Time: <strong id="responseTime">0ms</strong></span>
+                <span>Size: <strong id="responseSize">0 bytes</strong></span>
             </div>
-
-            <!-- Data APIs -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="feature-title">Data APIs</h3>
-                    <p class="feature-description">Real-time data and information services</p>
-                    <ul class="endpoint-list">
-                        <li>/data/currency-converter - Currency Exchange</li>
-                        <li>/data/weather - Weather Information</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Entertainment -->
-            <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="500">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-music"></i>
-                    </div>
-                    <h3 class="feature-title">Entertainment</h3>
-                    <p class="feature-description">Music, videos, and entertainment APIs</p>
-                    <ul class="endpoint-list">
-                        <li>/music/shazam - Music Recognition</li>
-                        <li>/tools/tinyurl - URL Shortening</li>
-                        <li>/random/anime - Random Anime</li>
-                        <li>/search/youtube - YouTube Search</li>
-                        <li>/download/ytmp3 - YouTube MP3 Download</li>
-                    </ul>
-                </div>
+            <div class="response-content" id="responseContent">
+                Response will appear here...
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- API Test Section -->
-    <section class="container" id="test-section">
-        <div class="api-test-section">
-            <h2 class="test-title text-center">
-                <i class="fas fa-flask"></i> Test Our API
-            </h2>
-            
-            <div class="test-form">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Select API Endpoint</label>
-                        <select class="form-select" id="endpointSelect">
-                            <option value="/api/info">API Information</option>
-                            <option value="/ai/chatgpt">AI ChatGPT</option>
-                            <option value="/ai/sentiment">Sentiment Analysis</option>
-                            <option value="/business/email-validator">Email Validator</option>
-                            <option value="/dev/uuid-generator">UUID Generator</option>
-                            <option value="/data/weather">Weather Data</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">HTTP Method</label>
-                        <select class="form-select" id="methodSelect">
-                            <option value="GET">GET</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div id="parameterFields">
-                    <!-- Dynamic parameters will be inserted here -->
-                </div>
-                
-                <div class="text-center mt-4">
-                    <button class="btn btn-primary-custom btn-lg" onclick="testAPI()">
-                        <i class="fas fa-play"></i> Test API
-                    </button>
-                    <button class="btn btn-secondary btn-lg ms-2" onclick="clearResult()">
-                        <i class="fas fa-clear"></i> Clear
-                    </button>
-                </div>
-                
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p class="mt-2">Processing your request...</p>
-                </div>
-                
-                <div class="result-box" id="resultBox">
-                    <h5><i class="fas fa-check-circle text-success"></i> API Response</h5>
-                    <div id="apiResponse"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Documentation Section -->
-    <section class="container" id="docs-section">
-        <div class="doc-section">
-            <h2 class="test-title text-center mb-5">
-                <i class="fas fa-book"></i> API Documentation
-            </h2>
-            
-            <div class="row">
-                <div class="col-lg-6">
-                    <h4>Getting Started</h4>
-                    <p>Using Ladybug API is simple and straightforward. No API key required!</p>
-                    
-                    <div class="endpoint-example">
-                        <h5>Base URL</h5>
-                        <div class="code-block">
-https://your-api-domain.com
-                        </div>
-                    </div>
-                    
-                    <div class="endpoint-example">
-                        <h5>Authentication</h5>
-                        <p>No authentication required! All endpoints are completely free.</p>
-                        <div class="badge bg-success">No API Key</div>
-                        <div class="badge bg-info ms-2">Unlimited Requests</div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-6">
-                    <h4>Example Usage</h4>
-                    
-                    <div class="endpoint-example">
-                        <h5><span class="method-badge method-get">GET</span> AI Chat</h5>
-                        <div class="code-block">
-GET /ai/chatgpt?text=Hello+world
-
-Response:
-{
-  "success": true,
-  "query": "Hello world",
-  "response": "Hello! How can I help you today?",
-  "model": "ChatGPT Premium",
-  "timestamp": "2024-01-01T12:00:00.000Z"
-}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-5">
-                <h4>Premium Features - All Free!</h4>
-                <div class="row mt-4">
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-rocket fa-3x text-primary mb-3"></i>
-                            <h6>Lightning Fast</h6>
-                            <p class="text-muted">Optimized for speed</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
-                            <h6>Secure</h6>
-                            <p class="text-muted">Enterprise security</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
-                            <h6>Scalable</h6>
-                            <p class="text-muted">Handle any load</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <i class="fas fa-heart fa-3x text-danger mb-3"></i>
-                            <h6>Free Forever</h6>
-                            <p class="text-muted">No hidden costs</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5><i class="fas fa-bug"></i> Ladybug API</h5>
-                    <p>Premium REST API with 60+ endpoints, completely free for everyone.</p>
-                    <div class="mt-3">
-                        <span class="badge bg-warning text-dark">Version 2.2.0</span>
-                        <span class="badge bg-success ms-2">Active</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Documentation</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">API Status</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Examples</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Support</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact</h5>
-                    <p><i class="fab fa-whatsapp"></i> WhatsApp: +263 71 845 6744</p>
-                    <p><i class="fas fa-globe"></i> Official: ntandostore.zone.id</p>
-                    <p><i class="fas fa-users"></i> Created by Ntando Mods Team</p>
-                </div>
-            </div>
-            <hr class="my-4 border-secondary">
-            <div class="text-center">
-                <p class="mb-0">&copy; 2024 Ladybug API. All premium features are completely free!</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- AOS Animation -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-
-        // Counter Animation
-        function animateCounter() {
-            const counters = document.querySelectorAll('[data-counter]');
+        // Complete API Endpoints Configuration - ALL 65+ ENDPOINTS
+        const endpoints = [
+            // AI APIs (8)
+            { category: 'ai', url: '/ai/chatgpt', title: 'AI ChatGPT', description: 'Premium AI chat with advanced language models', icon: 'fa-comments', params: { text: 'Hello, how are you today?' } },
+            { category: 'ai', url: '/ai/texttoimg', title: 'Text to Image', description: 'Generate AI images from text prompts', icon: 'fa-image', params: { prompt: 'A beautiful sunset over mountains', size: '1024x1024', style: 'realistic' } },
+            { category: 'ai', url: '/ai/writer', title: 'AI Writer', description: 'Generate articles, stories, and content', icon: 'fa-pen-fancy', params: { topic: 'Artificial Intelligence', type: 'article', length: 'medium' } },
+            { category: 'ai', url: '/ai/translate', title: 'Translate', description: 'Translate text between languages', icon: 'fa-language', params: { text: 'Hello world', from: 'auto', to: 'es' } },
+            { category: 'ai', url: '/ai/summarize', title: 'Summarize', description: 'Summarize long text automatically', icon: 'fa-compress-alt', params: { text: 'This is a long text that needs to be summarized into a shorter version while maintaining key points and important information for better understanding.', length: 'medium' } },
+            { category: 'ai', url: '/ai/sentiment', title: 'Sentiment Analysis', description: 'Analyze text sentiment (positive/negative)', icon: 'fa-smile', params: { text: 'I love this amazing product! It works perfectly and exceeded my expectations.' } },
+            { category: 'ai', url: '/ai/grammar', title: 'Grammar Check', description: 'Check and correct text grammar', icon: 'fa-spell-check', params: { text: 'This is a sentence with some grammar mistakes that needs to be corrected properly.' } },
+            { category: 'ai', url: '/ai/keyword', title: 'Keyword Extractor', description: 'Extract keywords from text', icon: 'fa-key', params: { text: 'Artificial intelligence and machine learning are transforming the technology industry with innovative solutions and automated processes.', max: '10' } },
             
-            counters.forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-counter'));
-                const increment = target / 100;
-                let current = 0;
-                
-                const updateCounter = () => {
-                    current += increment;
-                    if (current < target) {
-                        counter.textContent = Math.ceil(current);
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        counter.textContent = target;
-                    }
-                };
-                
-                updateCounter();
-            });
-        }
+            // Business Tools (3)
+            { category: 'business', url: '/business/email-validator', title: 'Email Validator', description: 'Validate email addresses instantly', icon: 'fa-envelope', params: { email: 'user@example.com' } },
+            { category: 'business', url: '/business/phone-validator', title: 'Phone Validator', description: 'Validate phone numbers worldwide', icon: 'fa-phone', params: { phone: '+1234567890', country: 'US' } },
+            { category: 'business', url: '/business/color-palette', title: 'Color Palette', description: 'Generate beautiful color schemes', icon: 'fa-palette', params: { theme: 'vibrant', count: '5' } },
+            
+            // Developer Tools (3)
+            { category: 'dev', url: '/dev/json-formatter', title: 'JSON Formatter', description: 'Format and validate JSON strings', icon: 'fa-code', params: { json: '{"name":"John","age":30,"city":"New York"}', indent: '2' } },
+            { category: 'dev', url: '/dev/base64-encoder', title: 'Base64 Encoder', description: 'Encode/decode Base64 text', icon: 'fa-lock', params: { text: 'Hello World', action: 'encode' } },
+            { category: 'dev', url: '/dev/uuid-generator', title: 'UUID Generator', description: 'Generate unique identifiers', icon: 'fa-fingerprint', params: { version: '4', count: '5' } },
+            
+            // Social Media (2)
+            { category: 'social', url: '/social/twitter-screenshot', title: 'Twitter Screenshot', description: 'Generate Twitter profile screenshots', icon: 'fa-twitter', params: { username: 'elonmusk', theme: 'light' } },
+            { category: 'social', url: '/social/instagram-downloader', title: 'Instagram Downloader', description: 'Download Instagram media', icon: 'fa-instagram', params: { url: 'https://www.instagram.com/p/example/' } },
+            
+            // Data APIs (2)
+            { category: 'data', url: '/data/currency-converter', title: 'Currency Converter', description: 'Convert between currencies', icon: 'fa-exchange-alt', params: { amount: '100', from: 'USD', to: 'EUR' } },
+            { category: 'data', url: '/data/weather', title: 'Weather Data', description: 'Get weather for any city', icon: 'fa-cloud-sun', params: { city: 'New York', units: 'metric' } },
+            
+            // System APIs (3)
+            { category: 'system', url: '/api/info', title: 'API Information', description: 'Get complete API details', icon: 'fa-info-circle', params: {} },
+            { category: 'system', url: '/api/status', title: 'API Status', description: 'Check API health and status', icon: 'fa-heartbeat', params: {} },
+            { category: 'system', url: '/health', title: 'Health Check', description: 'Simple health check endpoint', icon: 'fa-check-circle', params: {} },
+            
+            // Music APIs (5)
+            { category: 'music', url: '/music/shazam', title: 'Shazam Music', description: 'Identify music from audio', icon: 'fa-music', params: { url: 'https://example.com/audio.mp3' } },
+            { category: 'music', url: '/music/lyrics', title: 'Song Lyrics', description: 'Get song lyrics by title', icon: 'fa-microphone', params: { song: 'Shape of You', artist: 'Ed Sheeran' } },
+            { category: 'music', url: '/music/spotify', title: 'Spotify Search', description: 'Search tracks on Spotify', icon: 'fa-spotify', params: { query: 'Best songs 2024', type: 'track' } },
+            { category: 'music', url: '/music/youtube', title: 'YouTube Music', description: 'Search YouTube music', icon: 'fa-youtube', params: { query: 'Pop music playlist', limit: '10' } },
+            { category: 'music', url: '/music/playlist', title: 'Playlist Generator', description: 'Generate music playlists', icon: 'fa-list-music', params: { genre: 'pop', mood: 'happy', count: '20' } },
+            
+            // Tools APIs (10)
+            { category: 'tools', url: '/tools/tinyurl', title: 'Tiny URL', description: 'Shorten URLs instantly', icon: 'fa-link', params: { url: 'https://example.com/very-long-url' } },
+            { category: 'tools', url: '/tools/qr-code', title: 'QR Code Generator', description: 'Generate QR codes', icon: 'fa-qrcode', params: { text: 'https://example.com', size: '200' } },
+            { category: 'tools', url: '/tools/password', title: 'Password Generator', description: 'Generate secure passwords', icon: 'fa-key', params: { length: '16', includeSymbols: 'true' } },
+            { category: 'tools', url: '/tools/hash', title: 'Hash Generator', description: 'Generate text hashes', icon: 'fa-shield-alt', params: { text: 'Hello World', algorithm: 'sha256' } },
+            { category: 'tools', url: '/tools/timestamp', title: 'Timestamp Converter', description: 'Convert timestamps', icon: 'fa-clock', params: { timestamp: '1640995200', format: 'datetime' } },
+            { category: 'tools', url: '/tools/calculator', title: 'Calculator', description: 'Perform calculations', icon: 'fa-calculator', params: { expression: '2+2*3' } },
+            { category: 'tools', url: '/tools/units', title: 'Unit Converter', description: 'Convert between units', icon: 'fa-ruler', params: { value: '100', from: 'kg', to: 'lbs' } },
+            { category: 'tools', url: '/tools/ascii', title: 'ASCII Art', description: 'Generate ASCII art', icon: 'fa-font', params: { text: 'HELLO', font: 'standard' } },
+            { category: 'tools', url: '/tools/morse', title: 'Morse Code', description: 'Convert to/from morse code', icon: 'fa-broadcast-tower', params: { text: 'SOS', action: 'encode' } },
+            { category: 'tools', url: '/tools/roman', title: 'Roman Numerals', description: 'Convert to/from roman numerals', icon: 'fa-monument', params: { number: '2024', action: 'toRoman' } },
+            
+            // Random APIs (8)
+            { category: 'random', url: '/random/anime', title: 'Random Anime', description: 'Get random anime recommendations', icon: 'fa-tv', params: { genre: 'action', limit: '5' } },
+            { category: 'random', url: '/random/movie', title: 'Random Movie', description: 'Get random movie suggestions', icon: 'fa-film', params: { genre: 'comedy', year: '2020' } },
+            { category: 'random', url: '/random/quote', title: 'Random Quote', description: 'Get inspirational quotes', icon: 'fa-quote-left', params: { category: 'motivational' } },
+            { category: 'random', url: '/random/joke', title: 'Random Joke', description: 'Get random jokes', icon: 'fa-laugh', params: { type: 'programming' } },
+            { category: 'random', url: '/random/fact', title: 'Random Fact', description: 'Get interesting facts', icon: 'fa-lightbulb', params: { category: 'science' } },
+            { category: 'random', url: '/random/word', title: 'Random Word', description: 'Generate random words', icon: 'fa-spell-check', params: { type: 'noun', count: '5' } },
+            { category: 'random', url: '/random/color', title: 'Random Color', description: 'Generate random colors', icon: 'fa-paint-brush', params: { format: 'hex', count: '3' } },
+            { category: 'random', url: '/random/number', title: 'Random Number', description: 'Generate random numbers', icon: 'fa-dice', params: { min: '1', max: '100', count: '5' } },
+            
+            // Search APIs (8)
+            { category: 'search', url: '/search/youtube', title: 'YouTube Search', description: 'Search YouTube videos', icon: 'fa-youtube', params: { query: 'cats', limit: '10' } },
+            { category: 'search', url: '/search/google', title: 'Google Search', description: 'Search Google results', icon: 'fa-google', params: { query: 'artificial intelligence', limit: '10' } },
+            { category: 'search', url: '/search/image', title: 'Image Search', description: 'Search for images', icon: 'fa-image', params: { query: 'nature', limit: '20' } },
+            { category: 'search', url: '/search/news', title: 'News Search', description: 'Search news articles', icon: 'fa-newspaper', params: { query: 'technology', category: 'tech' } },
+            { category: 'search', url: '/search/book', title: 'Book Search', description: 'Search for books', icon: 'fa-book', params: { title: 'JavaScript', author: '', genre: 'programming' } },
+            { category: 'search', url: '/search/recipe', title: 'Recipe Search', description: 'Find recipes', icon: 'fa-utensils', params: { ingredients: 'chicken', cuisine: 'italian' } },
+            { category: 'search', url: '/search/product', title: 'Product Search', description: 'Search products', icon: 'fa-shopping-cart', params: { query: 'laptop', category: 'electronics', priceRange: '500-1000' } },
+            { category: 'search', url: '/search/meme', title: 'Meme Search', description: 'Find trending memes', icon: 'fa-laugh-beam', params: { category: 'programming', limit: '10' } },
+            
+            // Download APIs (8)
+            { category: 'download', url: '/download/ytmp3', title: 'YouTube to MP3', description: 'Download YouTube audio', icon: 'fa-download', params: { url: 'https://youtube.com/watch?v=example', quality: 'high' } },
+            { category: 'download', url: '/download/ytmp4', title: 'YouTube to MP4', description: 'Download YouTube video', icon: 'fa-video', params: { url: 'https://youtube.com/watch?v=example', quality: '1080p' } },
+            { category: 'download', url: '/download/instagram', title: 'Instagram Downloader', description: 'Download Instagram posts', icon: 'fa-instagram', params: { url: 'https://instagram.com/p/example' } },
+            { category: 'download', url: '/download/tiktok', title: 'TikTok Downloader', description: 'Download TikTok videos', icon: 'fa-tiktok', params: { url: 'https://tiktok.com/@user/video/example' } },
+            { category: 'download', url: '/download/facebook', title: 'Facebook Video', description: 'Download Facebook videos', icon: 'fa-facebook', params: { url: 'https://facebook.com/video/example' } },
+            { category: 'download', url: '/download/twitter', title: 'Twitter Video', description: 'Download Twitter videos', icon: 'fa-twitter', params: { url: 'https://twitter.com/user/status/example' } },
+            { category: 'download', url: '/download/soundcloud', title: 'SoundCloud Downloader', description: 'Download SoundCloud tracks', icon: 'fa-soundcloud', params: { url: 'https://soundcloud.com/artist/track' } },
+            { category: 'download', url: '/download/spotify', title: 'Spotify Downloader', description: 'Download Spotify tracks', icon: 'fa-spotify', params: { url: 'https://open.spotify.com/track/example' } },
+            
+            // Image APIs (5)
+            { category: 'image', url: '/image/resize', title: 'Image Resize', description: 'Resize images online', icon: 'fa-expand', params: { url: 'https://example.com/image.jpg', width: '800', height: '600' } },
+            { category: 'image', url: '/image/convert', title: 'Image Convert', description: 'Convert image formats', icon: 'fa-exchange-alt', params: { url: 'https://example.com/image.jpg', format: 'png' } },
+            { category: 'image', url: '/image/compress', title: 'Image Compress', description: 'Compress image sizes', icon: 'fa-compress', params: { url: 'https://example.com/image.jpg', quality: '80' } },
+            { category: 'image', url: '/image/filter', title: 'Image Filter', description: 'Apply filters to images', icon: 'fa-magic', params: { url: 'https://example.com/image.jpg', filter: 'grayscale' } },
+            { category: 'image', url: '/image/metadata', title: 'Image Metadata', description: 'Extract image metadata', icon: 'fa-info', params: { url: 'https://example.com/image.jpg' } }
+        ];
 
-        // Start counter animation when visible
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter();
-                    observer.disconnect();
-                }
-            });
-        });
-
-        document.querySelectorAll('[data-counter]').forEach(counter => {
-            observer.observe(counter);
-        });
-
-        // API Test Functionality
-        const endpointConfigs = {
-            '/api/info': {},
-            '/ai/chatgpt': { text: 'Hello, how are you?' },
-            '/ai/sentiment': { text: 'I love this amazing API!' },
-            '/business/email-validator': { email: 'test@example.com' },
-            '/dev/uuid-generator': { count: 5 },
-            '/data/weather': { city: 'New York' }
+        // Global variables
+        let currentFilter = 'all';
+        let stats = {
+            tested: 0,
+            success: 0,
+            failed: 0,
+            totalTime: 0
         };
 
-        function updateParameterFields() {
-            const endpoint = document.getElementById('endpointSelect').value;
-            const params = endpointConfigs[endpoint] || {};
-            const container = document.getElementById('parameterFields');
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderEndpoints();
+        });
+
+        // Render endpoints
+        function renderEndpoints() {
+            const grid = document.getElementById('endpointGrid');
+            const filtered = currentFilter === 'all' ? endpoints : endpoints.filter(e => e.category === currentFilter);
             
-            container.innerHTML = '';
-            
-            Object.entries(params).forEach(([key, value]) => {
-                const fieldHtml = `
-                    <div class="mb-3">
-                        <label class="form-label">${key.charAt(0).toUpperCase() + key.slice(1)}</label>
-                        <input type="text" class="form-control" id="param_${key}" value="${value}" placeholder="Enter ${key}">
+            grid.innerHTML = filtered.map(endpoint => `
+                <div class="endpoint-card" data-url="${endpoint.url}" data-category="${endpoint.category}">
+                    <div class="endpoint-header">
+                        <i class="fas ${endpoint.icon} endpoint-icon"></i>
+                        <span class="status-indicator status-idle" id="status-${endpoint.url.replace(/[^a-zA-Z0-9]/g, '-')}"></span>
                     </div>
-                `;
-                container.innerHTML += fieldHtml;
-            });
+                    <h5 class="endpoint-title">${endpoint.title}</h5>
+                    <div class="endpoint-url">${endpoint.url}</div>
+                    <p class="endpoint-description">${endpoint.description}</p>
+                    <button class="test-btn" onclick="testEndpoint('${endpoint.url}')">
+                        <i class="fas fa-play"></i> Test Now
+                    </button>
+                </div>
+            `).join('');
         }
 
-        document.getElementById('endpointSelect').addEventListener('change', updateParameterFields);
-        updateParameterFields();
+        // Test single endpoint
+        async function testEndpoint(url) {
+            const endpoint = endpoints.find(e => e.url === url);
+            if (!endpoint) return;
 
-        async function testAPI() {
-            const endpoint = document.getElementById('endpointSelect').value;
-            const method = document.getElementById('methodSelect').value;
-            const loading = document.getElementById('loading');
-            const resultBox = document.getElementById('resultBox');
-            const apiResponse = document.getElementById('apiResponse');
+            const card = document.querySelector(`[data-url="${url}"]`);
+            const statusIndicator = document.getElementById(`status-${url.replace(/[^a-zA-Z0-9]/g, '-')}`);
+            const testBtn = card.querySelector('.test-btn');
             
-            // Get parameters
-            const params = {};
-            const paramInputs = document.querySelectorAll('[id^="param_"]');
-            paramInputs.forEach(input => {
-                const key = input.id.replace('param_', '');
-                params[key] = input.value;
-            });
-            
-            // Build URL
-            const url = endpoint + '?' + new URLSearchParams(params);
-            
-            // Show loading
-            loading.style.display = 'block';
-            resultBox.style.display = 'none';
-            
+            // Update UI
+            card.classList.add('testing');
+            statusIndicator.className = 'status-indicator status-testing';
+            testBtn.innerHTML = '<span class="spinner"></span> Testing...';
+            testBtn.disabled = true;
+
+            const startTime = Date.now();
+
             try {
-                const response = await fetch(url);
-                const data = await response.json();
+                // Build URL with parameters
+                let fullUrl = endpoint.url;
+                const params = new URLSearchParams();
                 
-                // Display result
-                apiResponse.innerHTML = `<pre class="mb-0">${JSON.stringify(data, null, 2)}</pre>`;
-                resultBox.style.display = 'block';
+                Object.entries(endpoint.params).forEach(([key, value]) => {
+                    if (value) params.append(key, value);
+                });
+                
+                if (params.toString()) {
+                    fullUrl += '?' + params.toString();
+                }
+
+                // Make request
+                const response = await fetch(fullUrl);
+                const data = await response.json();
+                const responseTime = Date.now() - startTime;
+
+                // Update stats
+                stats.tested++;
+                stats.totalTime += responseTime;
+                if (response.ok) {
+                    stats.success++;
+                    card.classList.add('success');
+                    card.classList.remove('error');
+                    statusIndicator.className = 'status-indicator status-success';
+                } else {
+                    stats.failed++;
+                    card.classList.add('error');
+                    card.classList.remove('success');
+                    statusIndicator.className = 'status-indicator status-error';
+                }
+
+                // Update button
+                testBtn.innerHTML = `<i class="fas fa-redo"></i> Test Again (${responseTime}ms)`;
+                testBtn.disabled = false;
+
+                // Show response in modal
+                showResponse(endpoint.title, data, response.ok, responseTime);
+
+                updateStats();
+
             } catch (error) {
-                apiResponse.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-                resultBox.style.display = 'block';
-            } finally {
-                loading.style.display = 'none';
+                const responseTime = Date.now() - startTime;
+                stats.tested++;
+                stats.failed++;
+                stats.totalTime += responseTime;
+
+                card.classList.add('error');
+                statusIndicator.className = 'status-indicator status-error';
+                testBtn.innerHTML = `<i class="fas fa-redo"></i> Test Again (Error)`;
+                testBtn.disabled = false;
+
+                showResponse(endpoint.title, { error: error.message }, false, responseTime);
+                updateStats();
             }
+
+            card.classList.remove('testing');
         }
 
-        function clearResult() {
-            document.getElementById('resultBox').style.display = 'none';
-            document.getElementById('apiResponse').innerHTML = '';
-        }
-
-        function scrollToTest() {
-            document.getElementById('test-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function scrollToDocs() {
-            document.getElementById('docs-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Update uptime
-        function updateUptime() {
-            const uptimeElement = document.getElementById('uptime');
-            if (uptimeElement) {
-                const uptime = Math.floor(Math.random() * 100) + ' days';
-                uptimeElement.textContent = uptime;
+        // Test all endpoints
+        async function testAllEndpoints() {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            // Reset stats
+            stats = { tested: 0, success: 0, failed: 0, totalTime: 0 };
+            updateStats();
+            
+            // Show progress
+            progressContainer.classList.add('show');
+            
+            for (let i = 0; i < endpoints.length; i++) {
+                const endpoint = endpoints[i];
+                
+                // Update progress
+                const progress = Math.round(((i + 1) / endpoints.length) * 100);
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `${progress}% Complete - Testing ${endpoint.title} (${i + 1}/${endpoints.length})`;
+                
+                // Test endpoint
+                await testEndpoint(endpoint.url);
+                
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 300));
             }
+            
+            // Show final message
+            progressText.textContent = `\u2705 Complete! ${stats.success}/${stats.tested} successful in ${Math.round(stats.totalTime)}ms total`;
+            
+            // Hide progress after delay
+            setTimeout(() => {
+                progressContainer.classList.remove('show');
+            }, 3000);
         }
 
-        updateUptime();
-        setInterval(updateUptime, 60000);
+        // Test category endpoints
+        async function testCategory(category) {
+            const categoryEndpoints = endpoints.filter(e => e.category === category);
+            
+            // Reset stats
+            stats = { tested: 0, success: 0, failed: 0, totalTime: 0 };
+            updateStats();
+            
+            // Show progress
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressContainer.classList.add('show');
+            
+            for (let i = 0; i < categoryEndpoints.length; i++) {
+                const endpoint = categoryEndpoints[i];
+                
+                // Update progress
+                const progress = Math.round(((i + 1) / categoryEndpoints.length) * 100);
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `${progress}% Complete - Testing ${endpoint.title} (${i + 1}/${categoryEndpoints.length})`;
+                
+                // Test endpoint
+                await testEndpoint(endpoint.url);
+                
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            // Show final message
+            progressText.textContent = `\u2705 Category Complete! ${stats.success}/${stats.tested} successful`;
+            
+            // Hide progress after delay
+            setTimeout(() => {
+                progressContainer.classList.remove('show');
+            }, 3000);
+        }
 
-        // Copy to clipboard functionality
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Show success message
-                const toast = document.createElement('div');
-                toast.className = 'position-fixed top-0 end-0 p-3';
-                toast.style.zIndex = '11';
-                toast.innerHTML = `
-                    <div class="toast show" role="alert">
-                        <div class="toast-body bg-success text-white">
-                            Copied to clipboard!
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 2000);
+        // Filter endpoints
+        function filterEndpoints(category) {
+            currentFilter = category;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
+            event.target.classList.add('active');
+            
+            // Re-render endpoints
+            renderEndpoints();
         }
 
-        // Add copy buttons to code blocks
-        document.querySelectorAll('.code-block').forEach(block => {
-            const button = document.createElement('button');
-            button.className = 'btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2';
-            button.innerHTML = '<i class="fas fa-copy"></i>';
-            button.onclick = () => copyToClipboard(block.textContent.trim());
-            block.style.position = 'relative';
-            block.parentElement.appendChild(button);
+        // Update statistics
+        function updateStats() {
+            document.getElementById('testedCount').textContent = stats.tested;
+            document.getElementById('successCount').textContent = stats.success;
+            
+            const avgTime = stats.tested > 0 ? Math.round(stats.totalTime / stats.tested) : 0;
+            document.getElementById('avgResponseTime').textContent = avgTime + 'ms';
+        }
+
+        // Show response modal
+        function showResponse(title, data, success, responseTime) {
+            const modal = document.getElementById('responseModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const responseStatus = document.getElementById('responseStatus');
+            const responseTimeEl = document.getElementById('responseTime');
+            const responseSize = document.getElementById('responseSize');
+            const responseContent = document.getElementById('responseContent');
+            
+            modalTitle.textContent = title + ' - Response';
+            responseStatus.textContent = success ? 'Success' : 'Error';
+            responseStatus.className = 'response-badge ' + (success ? 'badge-success' : 'badge-error');
+            responseTimeEl.textContent = responseTime + 'ms';
+            
+            const jsonStr = JSON.stringify(data, null, 2);
+            responseSize.textContent = jsonStr.length + ' bytes';
+            responseContent.textContent = jsonStr;
+            
+            modal.classList.add('show');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('responseModal').classList.remove('show');
+        }
+
+        // Close modal on background click
+        document.getElementById('responseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                testAllEndpoints();
+            }
         });
     </script>
 </body>
